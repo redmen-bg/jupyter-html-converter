@@ -1,48 +1,22 @@
 import os
-import nbformat
-from nbconvert import HTMLExporter
-import boto3
+from aws import download_from_s3_bucket, upload_to_s3_bucket
+from notebooks import convert_to_html
+from files import create_temp_file, delete_temp_files, write_to_file
 
-
-s3_client = boto3.client('s3')
+DOWNLOAD_BUCKET = os.environ['download_bucket']
+UPLOAD_BUCKET = os.environ['upload_bucket']
 
 def handler(event, context):
-    DOWNLOAD_PATH = os.environ['download_path']
-    UPLOAD_PATH = os.environ['upload_path']
-    DOWNLOAD_BUCKET = os.environ['download_bucket']
-    UPLOAD_BUCKET = os.environ['upload_bucket']
+    notebook_name = event['notebook_name']
+    notebook_file = create_temp_file()
+    download_from_s3_bucket(DOWNLOAD_BUCKET, notebook_name, notebook_file)
 
-    NOTEBOOK_NAME = event['notebook_name']
-    HTML_NAME = NOTEBOOK_NAME.split(".")[0] + ".html"
+    notebook_html = convert_to_html(notebook_file)
 
-    s3_client.download_file(DOWNLOAD_BUCKET, NOTEBOOK_NAME, DOWNLOAD_PATH)
+    notebook_html_file = create_temp_file()
+    write_to_file(notebook_html, notebook_html_file)
 
-    # print("Attempt to download the notebook to %s" % DOWNLOAD_PATH)
+    notebook_html_name = notebook_name.split(".")[0] + ".html"
+    upload_to_s3_bucket(notebook_html_file, UPLOAD_BUCKET, notebook_html_name)
 
-    with(open(DOWNLOAD_PATH, "r")) as notebook_file:
-        notebook_data = notebook_file.read()
-
-    # print("Attempt to read the notebook from %s" %  DOWNLOAD_PATH)
-        notebook = nbformat.reads(notebook_data, as_version=4)
-
-        # print("Attempt to convert the notebook from %s" % DOWNLOAD_PATH)
-
-        html_exporter = HTMLExporter()
-        html_exporter.template_file = 'basic'
-
-        (body, resources) = html_exporter.from_notebook_node(notebook)
-
-    # print("Attempt to write the converted notebook to %s" % UPLOAD_PATH)
-
-    with(open(UPLOAD_PATH, "w")) as html_file:
-        html_file.write(body)
-
-    # print("Attempt to upload the converted notebook from %s" % UPLOAD_PATH)
-
-        s3_client.upload_file(UPLOAD_PATH, UPLOAD_BUCKET, HTML_NAME)
-
-
-
-
-     
-
+    delete_temp_files(notebook_file, notebook_html_file)
