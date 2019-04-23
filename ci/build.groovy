@@ -12,7 +12,6 @@ node {
 
         stage('Build') {
             buildImage.inside() {
-                sh "ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1"
                 sh "cd ci && chmod +x *.sh"
                 sh "cd ci && sh ./build_lambda.sh"
             }
