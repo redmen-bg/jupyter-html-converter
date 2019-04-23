@@ -23,6 +23,15 @@ def _read_notebook(notebook_file):
     return notebook
 
 def _execute_notebook(notebook_data):
+
+    from jupyter_client.kernelspec import KernelSpecManager
+    km = KernelSpecManager()
+    print('> find_kernel_specs <')
+    print(km.find_kernel_specs())
+
+    print('-- get_kernel_spec --')
+    print(km.get_kernel_spec("python3").to_dict())
+
     preprocessor = ExecutePreprocessor(timeout=600, kernel_name='python3')
     preprocessor.preprocess(notebook_data, {'metadata': {'path': tempfile.gettempdir()}})
 

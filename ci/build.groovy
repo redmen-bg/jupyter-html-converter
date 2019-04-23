@@ -13,7 +13,7 @@ node {
         stage('Build') {
             buildImage.inside() {
                 sh "cd ci && chmod +x *.sh"
-                sh "cd ci && sh ./build_lambda.sh"
+                sh "cd ci && bash ./build_lambda.sh"
             }
         }
 

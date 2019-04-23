@@ -8,6 +8,20 @@ UPLOAD_BUCKET = os.environ['upload_bucket']
 
 def handler(event, context):
 
+    import subprocess
+    print("----------------- pwd:")
+    subprocess.run(["pwd"])
+    print("----------------- ls")
+    subprocess.run(["ls", "-la", "jupyter*"])
+    # print("----------------- whereis python")
+    # subprocess.run(["whereis", "python"])
+    print("----------------- whereis jupyter")
+    subprocess.run(["whereis", "jupyter"])
+    print("----------------- whereis jupyter-kernelspec")
+    subprocess.run(["whereis", "jupyter-kernelspec", "list"])
+    # print("----------------- pip install jupyter")
+    # subprocess.run(["pip", "install", "jupyter"])
+
     try:
         notebook_name = event['notebook_name']
         notebook_file = create_temp_file()
