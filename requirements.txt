@@ -1,6 +1,7 @@
 nbconvert==5.4.1
 ipython==7.4.0
 jupyter-client==5.2.4
+pgen==0.2.1
 Cython==0.29.7
 h5py==2.9.0
 pyzmq==18.0.1
