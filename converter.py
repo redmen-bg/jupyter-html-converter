@@ -18,6 +18,7 @@ def handler(event, context):
     try:
         notebook_html_file = convert_to_html_file(notebook_file)
     except Exception as exc:
+        print(exc)
         raise Exception("Failed to convert notebook: %s from bucket: %s" % (notebook_name, DOWNLOAD_BUCKET)) from exc
 
     try:

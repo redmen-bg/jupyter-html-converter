@@ -1,13 +1,16 @@
+import tempfile
 import nbformat
 from nbconvert import HTMLExporter
+from nbconvert.preprocessors import ExecutePreprocessor
 from files import create_temp_file, write_to_file
 import jupyter_client
 
 def convert_to_html_file(notebook_path):
     with(open(notebook_path, "r")) as notebook_file:
         notebook_data = _read_notebook(notebook_file)
+        _execute_notebook(notebook_data)
         html = _convert_notebook_to_html(notebook_data)
-        
+
         notebook_html_file = create_temp_file()
         write_to_file(html, notebook_html_file)
 
@@ -19,6 +22,10 @@ def _read_notebook(notebook_file):
 
     return notebook
 
+def _execute_notebook(notebook_data):
+    preprocessor = ExecutePreprocessor(timeout=600, kernel_name='python3')
+    preprocessor.preprocess(notebook_data, {'metadata': {'path': tempfile.gettempdir()}})
+
 def _convert_notebook_to_html(notebook_data):
     html_exporter = HTMLExporter()
     html_exporter.template_file = 'basic'
@@ -26,5 +33,5 @@ def _convert_notebook_to_html(notebook_data):
 
     return body
 
-    
+
 
