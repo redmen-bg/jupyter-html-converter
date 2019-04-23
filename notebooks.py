@@ -1,6 +1,7 @@
 import nbformat
 from nbconvert import HTMLExporter
 from files import create_temp_file, write_to_file
+import jupyter_client
 
 def convert_to_html_file(notebook_path):
     with(open(notebook_path, "r")) as notebook_file:
