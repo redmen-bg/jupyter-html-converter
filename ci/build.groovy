@@ -21,6 +21,13 @@ node {
             sh "aws s3 cp dist/function.zip s3://${targetBucket}/function-${commitHash}.zip"
             sh "aws lambda update-function-code --function-name ${packagename} --s3-bucket ${targetBucket} --s3-key function-${commitHash}.zip"
         }
+
+//         stage('Deploy') {
+//             docker.image('localhost:5001/alpiq/aws-cli-container:latest').inside() {
+//                 sh "aws s3 cp dist/function.zip s3://${targetBucket}/function-${commitHash}.zip"
+//                 sh "aws lambda update-function-code --function-name ${packagename} --s3-bucket ${targetBucket} --s3-key function-${commitHash}.zip"
+//             }
+//         }
     }
     finally {
         step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])

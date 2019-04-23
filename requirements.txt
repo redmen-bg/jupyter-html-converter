@@ -1,1 +1,5 @@
 nbconvert==5.4.1
+nbformat==4.4.0
+ipython
+jupyter-client==5.2.4
+
