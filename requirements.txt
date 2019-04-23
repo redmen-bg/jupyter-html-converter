@@ -1,3 +1,2 @@
 nbconvert==5.4.1
 jupyter-client==5.2.4
-pyzmq==18.0.1

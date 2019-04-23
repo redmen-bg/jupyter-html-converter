@@ -16,7 +16,7 @@ mkdir package
 echo "Build the project dependencies"
 cd package
 pwd
-pip install -r ../requirements.txt --target .
+pip3 install -r ../requirements.txt --target .
 
 echo "Prepare initial archive package"
 pwd
