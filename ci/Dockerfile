@@ -1,7 +1,6 @@
-FROM python:3.7-alpine
+FROM python:3.7-slim
 
-RUN apk add zip
-RUN apk add gcc
-RUN apk update && apk add libzmq python3-dev zeromq-dev
+RUN apt-get update
+RUN apt-get install -y zip
 
 RUN python --version
